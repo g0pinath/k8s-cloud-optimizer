@@ -1,0 +1,26 @@
+
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: devops-contributor
+  namespace: devops-team
+rules:
+- apiGroups: [""]
+  resources: ["*"]
+  verbs: ["*"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: dev-contributor-role-binding
+  namespace: devops-team
+subjects:
+- kind: User
+  name: gthiruv@realogy.net
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: devops-contributor
+  apiGroup: rbac.authorization.k8s.io
+---
+

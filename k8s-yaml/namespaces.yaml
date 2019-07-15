@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ingress-basic
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devops-team
+---

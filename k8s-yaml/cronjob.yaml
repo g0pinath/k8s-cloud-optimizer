@@ -1,0 +1,31 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: devops-optimizer-site-pod-a-cronjob
+  namespace: devops-team
+spec:
+  schedule: "0 2,23 * * 1-5" #"0 3,22 * * 1-5" -- summer -- "0 2,23 * * 1-5" during winter GMT <Mins> <HourinGMT> <DayofMonth> <Month> <DayofWeek> Ex run 1 pm GMT every monday * 13 * * 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: devops-optimizer-site-pod-a-cronjob
+            image: acrtrg01dev01dopsoptimizer.azurecr.io/devops-team-image-cronjob:v10
+            imagePullPolicy: Always
+            volumeMounts:          
+              - name: vsts-pat
+                mountPath: /etc/vsts-pat
+              - name: emailcredentialsvolume
+                mountPath: /etc/emailcredentials
+          volumes:
+            - name: vsts-pat
+              secret:
+                secretName: vsts-pat
+            - name: emailcredentialsvolume
+              secret:
+                secretName: emailcredentials
+          restartPolicy: OnFailure
+                  
+
+        

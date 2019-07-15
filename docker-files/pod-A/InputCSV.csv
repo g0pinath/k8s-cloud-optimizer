@@ -1,0 +1,6 @@
+VMName,ResourceGroupName,Batch,SubscriptionName,BusinessHoursSize,WeekDaysOffBusinessHoursWindowStart,WeekDaysOffBusinessHoursWindowEnd,OffBusinessHoursVMSize,TagIdentifier,Comments
+OCRtrial,RG-TRG01-LAB01-BERASOX,Batch1,LAB01-TRG01,Standard_B2ms,18,23,Standard_B2s,RlgyScaleOption,Set TagIdentified as TRUE if you want to scale down
+TestOCRLicBox,RG-TRG01-LAB01-BERASOX,Batch2,LAB01-TRG01,Standard_B2ms,18,23,Standard_B2s,RlgyScaleOption,Set TagIdentified as TRUE if you want to scale down
+AZTestVM002,RG-TRG01-LAB01-DASSWX,Batch2,LAB01-TRG01,Standard_B2ms,18,23,Standard_B2s,RlgyScaleOption,Set TagIdentified as TRUE if you want to scale down
+k8slab ,RG-TRG01-LAB01-GOPI,Batch3,LAB01-TRG01,Standard_B1s,18,23,Standard_B1ls,RlgyScaleOption,Set TagIdentified as TRUE if you want to scale down
+k8s-lab-slave,RG-TRG01-LAB01-GOPI,Batch3,LAB01-TRG01,Standard_B1s,18,23,Standard_B1ls,RlgyScaleOption,Set TagIdentified as TRUE if you want to scale down
