@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: devops-optimizer-site-pod-a
-        image: acrtrg01dev01dopsoptimizer.azurecr.io/devops-team-image-pod-a:v10
+        image: <acrname>.azurecr.io/devops-team-image-pod-a:v10
         env:
            - name: SECRET_USERNAME
              valueFrom:
