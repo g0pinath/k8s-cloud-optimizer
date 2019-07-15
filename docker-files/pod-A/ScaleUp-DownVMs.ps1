@@ -21,7 +21,7 @@ $servicePrincipalClientId = get-content /etc/dacreds/servicePrincipalClientId
 $servicePrincipalClientSecret = get-content /etc/dacreds/servicePrincipalClientSecret
 $EmailUserName = Get-Content "/etc/emailcredentials/emailusername"
 $EmailPassword = Get-Content "/etc/emailcredentials/emailpassword"
-$user="gopinath.thiruvengadam@trgc.com"
+$user="email"
 $base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(("{0}:{1}" -f $user,$vstspat)))
 $SecurePassword=convertto-securestring -AsPlainText -Force -String $EmailPassword
 $O365creds = New-object -TypeName System.Management.Automation.PSCredential -ArgumentList ($EmailUserName,$SecurePassword) 
@@ -29,14 +29,14 @@ $O365creds = New-object -TypeName System.Management.Automation.PSCredential -Arg
 #Connecto to Azure
 $clientID = "$servicePrincipalClientId"
 $passwd = "$servicePrincipalClientSecret"
-$tenantID = "28743320-645e-4840-8154-b4babd41162c"
+$tenantID = "tenantid"
 $secpasswd = ConvertTo-SecureString  -AsPlainText -Force -string $passwd
 $pscredential = New-Object System.Management.Automation.PSCredential($clientID, $secpasswd)
 Connect-AzAccount -ServicePrincipal -Credential $pscredential -TenantId $tenantId
 ###########################################
 
-Select-AzSubscription -SubscriptionName "LAB01-TRG01"
-Set-AzCurrentStorageAccount -StorageAccountName saaksdemo -ResourceGroupName  RG-TRG01-LAB01-GOPI
+Select-AzSubscription -SubscriptionName "subscriptionname"
+Set-AzCurrentStorageAccount -StorageAccountName saacctname -ResourceGroupName  <rgname>
 $ConsolidatedReport = @()
 $csv = Import-CSV "/scripts/InputCSV.csv" | where {$_.batch -eq "$CurrentBatch"}
 
@@ -144,8 +144,8 @@ Function SendEmail($EmailParameters)
  }
 
 ##################
-[hashtable]$EmailParameters = @{"FromAddress"="TRGO365SupportToolDev@trgc.com"; `
-"ToAddress"="TRGAzureReports@trgc.com";"MessageSubject"="Azure Report - AZ Resource Scale Down Report"; `
+[hashtable]$EmailParameters = @{"FromAddress"="emailaddress"; `
+"ToAddress"="emailaddress";"MessageSubject"="Azure Report - AZ Resource Scale Down Report"; `
 "HtmlBlobName"="$htmlblobName";"Container"=$Container;"LogsBlobName"=$LogsblobName}
 
 [string]$IsDaylightSavingTime = (Get-Date).IsDaylightSavingTime() # wonder why but from the pod it returns false in summer, although from Windows 10 its TRUE in summer.
@@ -428,7 +428,7 @@ Function CheckifAllBatchesareComplete()
     
             Select-AzSubscription -SubscriptionName "LAB01-TRG01" | Out-Null #if I dont suppress the output its tagging along on RETURN!
             "-------CheckifAllBatchesareComplete--$NumberofBatches-$$NumberofBatches-->>>>>>" | out-file /scripts/logs.txt -append
-            Set-AzCurrentStorageAccount -StorageAccountName saaksdemo -ResourceGroupName  RG-TRG01-LAB01-GOPI
+            Set-AzCurrentStorageAccount -StorageAccountName saacctname -ResourceGroupName  rgname
     do
     {
         $ConsolidatedReport =@() #if do is repeated then reset this or there could be duplicates.
@@ -484,7 +484,7 @@ Function TriggerBuild()
         $bodyString=$bodyJson | ConvertTo-Json -Depth 100
         Write-Output $bodyString
         
-        $Uri = "https://dev.azure.com/realogy/O365CSTool.TRG/_apis/build/builds?api-version=5.0"
+        $Uri = "az devops url"
         $buildresponse = Invoke-RestMethod -Method Post -UseDefaultCredentials -ContentType application/json -Uri $Uri -Body $bodyString -Headers @{Authorization=("Basic {0}" -f $base64AuthInfo)}
         $Status = (Invoke-RestMethod -Method Get -UseDefaultCredentials -ContentType application/json -Uri $buildresponse.URL -Headers @{Authorization=("Basic {0}" -f $base64AuthInfo)}).Status
         [int]$timelefttowait  = "15" #15 minutes
@@ -521,8 +521,8 @@ Function UploadReporttoBlob($CurrentBatch)
 {
     $ReportFileName = "_report.csv"
     [string]$blobName =  $CurrentBatch + $ReportFileName
-    Select-AzSubscription -SubscriptionName "LAB01-TRG01"
-    Set-AzCurrentStorageAccount -StorageAccountName saaksdemo -ResourceGroupName  RG-TRG01-LAB01-GOPI
+    Select-AzSubscription -SubscriptionName "subscription name"
+    Set-AzCurrentStorageAccount -StorageAccountName saacctname -ResourceGroupName  rgname
 
     Set-AzStorageBlobContent -Blob $blobName -Container $containerName -File "/scripts/finalreport.csv" -Force
 }
