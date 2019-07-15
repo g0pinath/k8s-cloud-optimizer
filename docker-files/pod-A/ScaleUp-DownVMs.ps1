@@ -293,14 +293,14 @@ Foreach($row in $csv)
             $ScaleOperation = "None"
             "I am inside  else  -- $ScaleOperation"  | out-file /scripts/logs.txt -append
         }
-        #Override scale operation variable based on resource tag {RlgyScaleOption: "TRUE"} | {RlgyScaleOption: "FALSE"} 
+        #Override scale operation variable based on resource tag {ScaleOption: "TRUE"} | {ScaleOption: "FALSE"} 
         #False means BU doesnt want to touch this VM, and let it run at full capacity at all times.
 
-        [string]$RlgyScaleOption = (Get-AzResource -Name "$VMName" -ResourceGroupName "$resourceGroup").Tags.RlgyScaleOption
-        if($RlgyScaleOption -eq "FALSE")
+        [string]$ScaleOption = (Get-AzResource -Name "$VMName" -ResourceGroupName "$resourceGroup").Tags.ScaleOption
+        if($ScaleOption -eq "FALSE")
         {
             $ScaleOperation = "BUOverRide"
-            "I am inside RlgyScaleOption if -- $RlgyScaleOption"  | out-file /scripts/logs.txt -append
+            "I am inside ScaleOption if -- $ScaleOption"  | out-file /scripts/logs.txt -append
         }
         Switch($ScaleOperation)
         {
@@ -426,7 +426,7 @@ Function CheckifAllBatchesareComplete()
 {
     [int]$timetowait = 30
     
-            Select-AzSubscription -SubscriptionName "LAB01-TRG01" | Out-Null #if I dont suppress the output its tagging along on RETURN!
+            Select-AzSubscription -SubscriptionName "subscriptionname" | Out-Null #if I dont suppress the output its tagging along on RETURN!
             "-------CheckifAllBatchesareComplete--$NumberofBatches-$$NumberofBatches-->>>>>>" | out-file /scripts/logs.txt -append
             Set-AzCurrentStorageAccount -StorageAccountName saacctname -ResourceGroupName  rgname
     do
@@ -476,7 +476,7 @@ Function TriggerBuild()
 {
         $body = '
         { 
-                "definition": {"ID": 684} 
+                "definition": {"ID": buildid} 
         }
         '
         $bodyJson=$body | ConvertFrom-Json
