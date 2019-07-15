@@ -104,7 +104,7 @@ $vstspat = get-content /etc/vsts-pat/vstspat
 
 $EmailUserName = Get-Content "/etc/emailcredentials/emailusername"
 $EmailPassword = Get-Content "/etc/emailcredentials/emailpassword"
-$user="gopinath.thiruvengadam@trgc.com"
+$user="emailaddress"
 $base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(("{0}:{1}" -f $user,$vstspat)))
 
 Function TriggerBuild()
@@ -119,7 +119,7 @@ Function TriggerBuild()
         $bodyString=$bodyJson | ConvertTo-Json -Depth 100
         Write-Output $bodyString
         
-        $Uri = "https://dev.azure.com/realogy/O365CSTool.TRG/_apis/build/builds?api-version=5.0"
+        $Uri = "<az devops url>"
         $buildresponse = Invoke-RestMethod -Method Post -UseDefaultCredentials -ContentType application/json -Uri $Uri -Body $bodyString -Headers @{Authorization=("Basic {0}" -f $base64AuthInfo)}
         $Status = (Invoke-RestMethod -Method Get -UseDefaultCredentials -ContentType application/json -Uri $buildresponse.URL -Headers @{Authorization=("Basic {0}" -f $base64AuthInfo)}).Status
         [int]$timelefttowait  = "15" #15 minutes
@@ -178,7 +178,7 @@ $SecurePassword=convertto-securestring -AsPlainText -Force -String $EmailPasswor
 $O365creds = New-object -TypeName System.Management.Automation.PSCredential -ArgumentList ($EmailUserName,$SecurePassword) 
 #Be careful with the hyphen if you are reusing the above!!!  -- https://stackoverflow.com/questions/45863545/new-object-pscredential-not-working-using-unicode-punctuation-syntactically Welcome to Linux(or blame it Linux)
 
-[hashtable]$EmailParameters = @{"FromAddress"="TRGO365SupportToolDev@trgc.com"; `
-"ToAddress"="TRGAzureReports@trgc.com";"MessageSubject"="Azure Report - AZ Resource CronJob Report"; `
+[hashtable]$EmailParameters = @{"FromAddress"="email"; `
+"ToAddress"="email";"MessageSubject"="Azure Report - AZ Resource CronJob Report"; `
 "HtmlBlobName"="$htmlblobName";"Container"=$Container;"LogsBlobName"=$LogsblobName}
 SendEmail $EmailParameters
